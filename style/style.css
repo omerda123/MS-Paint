@@ -1,0 +1,45 @@
+.paint{
+    height:600px;
+    background-color: rgb(219, 219, 219);
+    border: 1px solid black;
+}
+
+.menu{
+    height:30px;
+    background-color: lightgray;
+    display: flex;
+    justify-content: space-around;
+   
+}
+
+.sub-menu{
+    height: 100px;
+    
+}
+
+.canvas{
+    width:100%;
+    height: calc(100% - 100px);
+    background-color: white;
+}
+
+.toolbox{
+    width: 150px;
+    height: calc(100% - 100px);
+    background-color: crimson;
+    /* padding:20px; */
+}
+
+.main{
+    display: flex;
+    height: calc(600px - 30px)
+}
+
+i{
+    font-size: 30px;
+    margin: 15px;
+}
+
+.color-palette{
+    display: flex;
+}
