@@ -14,8 +14,10 @@
 }
 
 .sub-menu{
-    height: 100px;
-    
+    height: 60px;  
+    display: flex;
+    align-items: center ;
+    justify-content: space-evenly;  
 }
 
 .canvas{
@@ -27,7 +29,7 @@
 .toolbox{
     width: 150px;
     height: calc(100% - 100px);
-    background-color: crimson;
+    background-color: #90d690;
     /* padding:20px; */
 }
 

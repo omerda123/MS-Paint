@@ -1,12 +1,8 @@
 {
-  /*
-    create color pallete from array of colors
-*/
 
-  let tool;
-
+  // create color pallete from array of colors
   const createColorPalette = () => {
-    const colors = ["black", "white", "red", "yellow", "blue", "green", "purple", "lightblue", "orangered", "crimson","lightgreen"];
+    const colors = ["black", "salmon", "white", "red", "yellow", "magenta", "gray", "orange", "blue", "green", "fuchsia", "purple", "lightgray", "brown", "lightblue", "orangered", "crimson", "lightgreen"];
     for (let color of colors) {
       let colorBox = document.createElement("div");
       colorBox.style.width = "30px";
@@ -19,15 +15,14 @@
     }
   };
 
-  /*
-    sets the desired color by clicking on some color on the palette
-*/
 
+  // sets the desired color by clicking on some color on the palette
   const setColor = e => {
     color = e.target.style.backgroundColor;
   };
 
-  const draw = e => {
+  // what's happen while mouse move
+  const mouseMove = e => {
     if (drawing) {
       if (tool === "pencil") {
         let pixel = document.createElement("div");
@@ -47,7 +42,6 @@
       }
 
       else if (tool === "square") {
-        console.log("drawing square")
         endingPoint = [e.pageX, e.pageY];
         drawShape("square", startingPoint, endingPoint);
       }
@@ -55,18 +49,15 @@
   };
 
 
-
+  // change tool on click
   const changeTool = e => {
     tool = e.target.id;
-    console.log(e.target.id);
-    canvas.className = "canvas"
-    canvas.classList.add(tool)
-
-
+    canvas.className = "canvas";
+    canvas.classList.add(tool); //change cursor on the canvas
   }
 
+  // drawing square / circle from x,y coordinates of mouse down and up
   const drawShape = (shape = "square", start, end) => {
-
     let square = document.createElement("div");
     square.style.position = "absolute";
     square.style.left = `${start[0]}px`;
@@ -77,77 +68,65 @@
     if (shape === "circle")
       square.style.borderRadius = "50%";
     canvas.appendChild(square);
-
   }
 
+  // what's happen when mouse us down
   const mouseUp = (e) => {
-    if (tool === "pencil")
-      drawing = false;
-
-    else if (tool === "square") {
-      drawing = false;
-    }
-    //   endingPoint = [e.pageX, e.pageY];
-    //   drawShape("square", startingPoint, endingPoint);
-    // }
-    else if (tool === "circle") {
+    if (tool === "circle") {
       endingPoint = [e.pageX, e.pageY];
       drawShape("circle", startingPoint, endingPoint);
     }
+    else
+      drawing = false;
   }
 
-  const clicked = (e) => {
-    console.log(tool)
-    canvas.addEventListener("mousemove", draw);
+  // what's happen when mouse us up
+  const mouseDown = (e) => {
     if (tool === "pencil") {
       drawing = true;
-
     }
-
     else if (tool === "bucket") {
-      console.log(color);
       canvas.style.backgroundColor = color;
-
     }
-
 
     else if (tool === "eraser") {
       drawing = true;
-      // canvas.addEventListener("mousemove", draw);
-      canvas.addEventListener("mouseup", () => (drawing = false));
-      // console.log(e.target.style);
-
     }
 
     else if ((tool === "square") || (tool === "circle")) {
       drawing = true;
       startingPoint = [e.pageX, e.pageY];
-
     }
-
-
   }
 
+  // reset screen when press reset button
   const resetScreen = () => {
     divsInsideCanvas = document.querySelectorAll(".canvas div");
     divsInsideCanvas.forEach((subDiv) => subDiv.remove());
     canvas.style.backgroundColor = "white";
   }
 
-  let drawing = false;
 
+  // parameters declarations
+  let drawing = false;
+  let tool;
   let color = "black";
   let startingPoint = [];
   let endingPoint = [];
-  let canvas = document.querySelector(".canvas");
 
+  // get element from DOM
+  let canvas = document.querySelector(".canvas");
   const toolbox = document.querySelectorAll("i");
-  canvas.addEventListener("mousedown", clicked);
+  resetButton = document.querySelector(".menu-item:nth-child(3)")
+
+
+  // add event listeners 
+  canvas.addEventListener("mousemove", mouseMove);
+  canvas.addEventListener("mousedown", mouseDown);
   canvas.addEventListener("mouseup", mouseUp);
+  resetButton.addEventListener("click", resetScreen);
   toolbox.forEach((item) => item.addEventListener("click", changeTool));
 
-  resetButton = document.querySelector(".menu-item:nth-child(3)")
-  resetButton.addEventListener("click", resetScreen);
-
+  // function invocation 
   createColorPalette(); //creates the color palette from array
 }
