@@ -38,7 +38,7 @@
 
       else if (tool === "eraser") {
         if (!e.target.className.includes("canvas"))
-          e.target.style.display = "none";
+          e.target.remove();
       }
 
       else if (tool === "square") {
@@ -62,8 +62,8 @@
     square.style.position = "absolute";
     square.style.left = `${start[0]}px`;
     square.style.top = `${start[1]}px`;
-    square.style.height = `${end[1] - start[1]}px`;
-    square.style.width = `${end[0] - start[0]}px`;
+    square.style.height = `${Math.abs(end[1] - start[1])}px`;
+    square.style.width = `${Math.abs(end[0] - start[0])}px`;
     square.style.backgroundColor = color;
     if (shape === "circle")
       square.style.borderRadius = "50%";
@@ -99,13 +99,42 @@
     }
   }
 
+  //toggle display 
+  const toggleDisplay = (e = blank , item = "default") =>{
+    if (item === "default")
+        item = e.target.id;
+    if (item === "file"){
+      if (document.querySelector(".file-menu").style.display === "none")
+          document.querySelector(".file-menu").style.display = "block";
+      else 
+      document.querySelector(".file-menu").style.display = "none"
+    }
+  }
+
   // reset screen when press reset button
   const resetScreen = () => {
     divsInsideCanvas = document.querySelectorAll(".canvas div");
     divsInsideCanvas.forEach((subDiv) => subDiv.remove());
     canvas.style.backgroundColor = "white";
+    
+    
+  }
+  // save all divs to local storage
+  const saveAs = () =>{
+    divsInsideCanvas = document.querySelectorAll(".canvas div");
+    let divsArray = [];
+    (divsInsideCanvas.forEach((div) => {divsArray.push(div.outerHTML)}));
+    localStorage.setItem("canvas", JSON.stringify(divsArray));
+    toggleDisplay( null , "file")
+    console.log("Saved");
   }
 
+  const open = () => {
+    const divs = JSON.parse(localStorage.getItem("canvas"));
+    divs.forEach((div) =>  console.log(new DOMParser().parseFromString(div,"text/xml").documentElement));
+    divs.forEach((div) =>  canvas.appendChild(new DOMParser().parseFromString(div,"text/xml").documentElement));
+  
+  }
 
   // parameters declarations
   let drawing = false;
@@ -115,17 +144,23 @@
   let endingPoint = [];
 
   // get element from DOM
-  let canvas = document.querySelector(".canvas");
+  const canvas = document.querySelector(".canvas");
   const toolbox = document.querySelectorAll("i");
-  resetButton = document.querySelector(".menu-item:nth-child(3)")
+  const resetButton = document.querySelector(".menu-item:nth-child(3)")
+  const fileButton = document.querySelector(".menu-item:nth-child(1)") 
+  const saveAsButton = document.querySelector("#save-as")
+  const openButton = document.querySelector("#open")
 
 
   // add event listeners 
   canvas.addEventListener("mousemove", mouseMove);
   canvas.addEventListener("mousedown", mouseDown);
   canvas.addEventListener("mouseup", mouseUp);
+  fileButton.addEventListener("click", toggleDisplay)
   resetButton.addEventListener("click", resetScreen);
   toolbox.forEach((item) => item.addEventListener("click", changeTool));
+  saveAsButton.addEventListener("click", saveAs)
+  openButton.addEventListener("click", open)
 
   // function invocation 
   createColorPalette(); //creates the color palette from array

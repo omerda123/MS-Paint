@@ -1,18 +1,23 @@
+
 .paint{
     height:600px;
     background-color: rgb(219, 219, 219);
     border: 1px solid black;
+
 }
 
 .menu{
     height:30px;
+    padding-left: 10px;
     background-color: lightgray;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
    
 }
-
+.menu-item , .file-menu div{ 
+    cursor: pointer;
+}
 .sub-menu{
     height: 60px;  
     display: flex;
@@ -27,6 +32,10 @@
 }
 
 .toolbox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 150px;
     height: calc(100% - 100px);
     background-color: #90d690;
@@ -59,3 +68,13 @@ i{
 .bucket{
     cursor: url('../images/bucket.png') 5 20, auto;	
 }
+
+.file-menu{
+    position: absolute;
+    background-color: lightgray;
+    left: 10px;
+    width: 150px;
+    display: none;
+}
+
+
